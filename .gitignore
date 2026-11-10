@@ -1,0 +1,12 @@
+/.idea/
+/.rumdl_cache/
+/.ai/
+/node_modules/
+/coverage/
+/tmp/
+/artifacts/
+*.log
+*.jsonl
+.env
+.env.*
+!.env.example

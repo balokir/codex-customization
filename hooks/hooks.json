@@ -1,0 +1,33 @@
+{
+  "description": "Portable user-level Codex output-integrity hooks. Run hooks/setup.mjs install.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "c=\"${CODEX_HOME:-$HOME/.codex}\"; \"$c/codex-customization-node\" \"$c/codex-customization-hooks/pre_tool_use.mjs\"",
+            "commandWindows": "$c = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }; & (Join-Path $c 'codex-customization-node.exe') (Join-Path $c 'codex-customization-hooks\\pre_tool_use.mjs')",
+            "timeout": 5,
+            "statusMessage": "Checking tool output safety"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "c=\"${CODEX_HOME:-$HOME/.codex}\"; \"$c/codex-customization-node\" \"$c/codex-customization-hooks/post_tool_use.mjs\"",
+            "commandWindows": "$c = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME '.codex' }; & (Join-Path $c 'codex-customization-node.exe') (Join-Path $c 'codex-customization-hooks\\post_tool_use.mjs')",
+            "timeout": 5,
+            "statusMessage": "Checking tool output completeness"
+          }
+        ]
+      }
+    ]
+  }
+}

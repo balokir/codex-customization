@@ -1,0 +1,62 @@
+{
+  "engineVersion": "1.0.0",
+  "inputSchemaVersion": 1,
+  "maxInputBytes": 65536,
+  "maxGuidanceChars": 240,
+  "maxDecisionReasonChars": 240,
+  "supportedTools": {
+    "shell": [
+      "Bash"
+    ],
+    "code": [
+      "functions.exec"
+    ],
+    "mcpNamePattern": "^mcp__[A-Za-z0-9_-]+__[A-Za-z0-9_-]+$"
+  },
+  "guidance": {
+    "malformedJson": "Hook input could not be parsed, so the call was not blocked. Retry with a documented PreToolUse JSON envelope and review AGENTS.md.",
+    "oversizedInput": "Hook input exceeded the reviewed envelope limit, so the call was not blocked. Narrow the tool input and review AGENTS.md.",
+    "missingField": "Hook input was missing a required PreToolUse field, so the call was not blocked. Use the documented envelope and review AGENTS.md.",
+    "unsupportedSchema": "Hook input uses an unsupported schema version, so the call was not blocked. Review and version engine support before relying on it.",
+    "unknownTool": "Hook did not recognize this tool shape, so it did not block the call. Bound output at the producer and review AGENTS.md.",
+    "invalidToolInput": "Hook could not normalize this tool input, so the call was not blocked. Use a reviewed tool shape and review AGENTS.md.",
+    "ambiguousRead": "Hook could not prove this read is producer-bounded, so it was not blocked. Probe the target size, then use an explicit range or limit.",
+    "dynamicRead": "Hook could not classify a dynamic read target, so it was not blocked. Resolve the path, probe its size, and use an explicit range or limit.",
+    "ambiguousSearch": "Hook could not prove this search is scoped and producer-bounded, so it was not blocked. Add an explicit target and result bound.",
+    "dynamicDiscovery": "Hook could not classify this ALL_TOOLS source, so it was not blocked. Use a names-only exact-name or explicit-prefix check with a limit of 100."
+  },
+  "boundedReads": {
+    "knownHighVolumeNames": [
+      "AGENTS.md",
+      "SKILL.md"
+    ],
+    "knownHighVolumeExtensions": [
+      ".log",
+      ".out",
+      ".report",
+      ".trace"
+    ],
+    "denyReasons": {
+      "knownHighVolume": "Complete read of a known high-volume target requires an explicit producer-side range or limit.",
+      "multipleReads": "Multiple potentially high-volume reads must be split into individually bounded tool calls.",
+      "broadSearch": "Broad search must use an explicit scope and producer-side result bound."
+    }
+  },
+  "toolDiscovery": {
+    "maxNames": 100,
+    "genericTerms": [
+      "skill",
+      "tool",
+      "search",
+      "memory"
+    ],
+    "denyReasons": {
+      "directExposure": "ALL_TOOLS descriptors must not be serialized, emitted, returned, or copied.",
+      "metadataAccess": "Tool discovery may inspect only the name field, never descriptions, schemas, or complete descriptors.",
+      "unrestrictedInventory": "Tool discovery requires an exact-name or explicit-prefix filter and a producer-side limit of at most 100 names.",
+      "excessiveNames": "Tool discovery output must be limited to at most 100 names.",
+      "genericDiscovery": "Tool discovery must not use generic search terms; use explicit exact names or relevant explicit prefixes.",
+      "unsafeOrdering": "Tool descriptors must be reduced to names before filtering or searching."
+    }
+  }
+}
